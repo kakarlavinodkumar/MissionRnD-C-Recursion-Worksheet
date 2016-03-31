@@ -42,7 +42,47 @@ Read :How to access elements in 2D array when its first element address is passe
 P.S: The Above Problem is just a modified version of a popular BackTracking problem .
 */
 
-#include "stdafx.h"
-int solve_nsnipers(int *battlefield, int n){
+#include "stdafx.h" 
+
+bool can_place(int *board, int row, int col, int N)
+{
+	int i, j;
+	for (i = 0; i < col; i++)
+	if (*((board + row*N) + i))
+		return 0;
+	for (i = row, j = col; i >= 0 && j >= 0; i--, j--)     //left daigonally checking
+	{
+		if (*((board + i*N) + j))
+			return 0;
+	}
+	for (i = row, j = col; j >= 0 && i < N; i++, j--)   //right daigonal checking
+	{
+		if (*((board + i*N) + j))
+			return 0;
+	}
+	return 1;
+}
+bool nqueen(int *board, int colum, int N)
+{
+	if (colum >= N)
+		return 1;
+	for (int i = 0; i < N; i++)
+	{
+		if (can_place(board, i, colum, N))
+		{
+			*((board + i*N) + colum) = 1;
+			if (nqueen(board, colum + 1, N))
+				return 1;
+			*((board + i*N) + colum) = 0;  //in recursive backtracking 
+		}
+	}
 	return 0;
+}
+
+int solve_nsnipers(int *battlefield, int n){
+	if (battlefield == NULL || n <= 0)  //invalied i/ps
+		return 0;
+	if (n == 3 || n == 2) //not existing
+		return 0;
+	return nqueen(battlefield, 1, n);
 }

@@ -33,8 +33,25 @@ Note : Check the function Parameters ,Its a double pointer .
 
 #include "stdafx.h"
 #include<stdlib.h>
+ 
 
 int *spiral(int rows, int columns, int **input_array)
 {
-	return NULL;
+	int row_index, col_index, row_bound, index, *result, col_bound;
+	if (input_array == NULL || rows <= 0 || columns <= 0)
+		return NULL;
+	result = (int *)malloc(sizeof(int)*(rows*columns));
+	for (row_bound = col_bound = index = 0; row_bound < rows - row_bound&&col_bound < columns - col_bound; row_bound++, col_bound++)
+	{
+		for (col_index = row_bound; col_index < columns - row_bound; col_index++)
+			result[index++] = input_array[row_bound][col_index];
+		for (row_index = row_bound + 1; row_index < rows - row_bound; row_index++)
+			result[index++] = input_array[row_index][columns - row_bound - 1];
+		for (col_index = columns - row_bound - 2; col_index >= row_bound; col_index--)
+			result[index++] = input_array[rows - row_bound - 1][col_index];
+		for (row_index = rows - row_bound - 2; row_index>row_bound; row_index--)
+			result[index++] = input_array[row_index][row_bound];
+	}
+	return result;
 }
+
